@@ -111,7 +111,7 @@ export async function handler (event, context, callback) {
     },
     body: JSON.stringify({
       majorDimension: 'ROWS',
-      values: [Object.values(formValues)]
+      values: [[claims.email, ...Object.values(formValues)]]
     })
   })
 
@@ -141,7 +141,7 @@ export async function handler (event, context, callback) {
           })
         )
         .then(() => {
-          callback(null, { statusCode: 204 })
+          callback(null, { statusCode: 204, last_message_at })
         })
         .catch(err => {
           callback(null, {
