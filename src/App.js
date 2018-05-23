@@ -16,7 +16,7 @@ class SlackMessage extends Component {
   }
 
   getFormFields (fields) {
-    this.setState({ fields: fields })
+    this.setState({ formFields: fields })
   }
 
   generateHeaders () {
@@ -42,7 +42,7 @@ class SlackMessage extends Component {
         method: 'POST',
         headers,
         body: JSON.stringify({
-          text: this.state.text,
+          // text: this.state.text,
           formFields: this.state.formFields
         })
       })

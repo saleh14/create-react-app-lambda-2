@@ -10,13 +10,15 @@ export default class Form extends Component {
     this.setState({
       [e.target.name]: e.target.value
     })
-    if (this.props.getFormFields) { setTimeout(_ => this.props.getFormFields(this.state)) }
+    if (this.props.getFormFields) {
+      setTimeout(_ => this.props.getFormFields(this.state))
+    }
   }
   render () {
     return (
       <form>
         <label htmlFor='user_fullName'>
-          الاسم الكامل:
+          {/* الاسم الكامل: */}
         </label>
         <input
           type='text'
@@ -25,12 +27,12 @@ export default class Form extends Component {
         />
         <br />
         <label htmlFor='nationalID'>
-          رقم الهوية:
+          {/* رقم الهوية: */}
         </label>
         <input type='text' name='nationalID' onChange={e => this.change(e)} />
         <br />
         <label htmlFor='gender'>
-          الجنس:
+          {/* الجنس: */}
         </label>
         <input
           type='radio'
@@ -38,14 +40,14 @@ export default class Form extends Component {
           value='ذكر'
           onChange={e => this.change(e)}
         />
-        ذكر
+        {/* ذكر */}
         <input
           type='radio'
           name='gender'
           value='أنثى'
           onChange={e => this.change(e)}
         />
-        أنثى
+        {/* أنثى */}
       </form>
     )
   }

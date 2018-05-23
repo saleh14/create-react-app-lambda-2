@@ -84,7 +84,7 @@ export async function handler (event, context, callback) {
     })
   }
 
-  const claims = { clientContext: { identity: {} } } // context.clientContext && context.clientContext.user || {
+  const claims = context.clientContext && context.clientContext.user
   if (!claims) {
     return callback(null, {
       statusCode: 401,
@@ -111,7 +111,7 @@ export async function handler (event, context, callback) {
     },
     body: JSON.stringify({
       majorDimension: 'ROWS',
-      values: [Object.values()]
+      values: [Object.values(formValues)]
     })
   })
 
@@ -131,7 +131,7 @@ export async function handler (event, context, callback) {
       fetch(slackURL, {
         method: 'POST',
         body: JSON.stringify({
-          text: payload.text,
+          text: payload.text + ` \nValues sent: ${Object.values(formValues)}`,
           attachments: [{ text: `From ${user.email}` }]
         })
       })
