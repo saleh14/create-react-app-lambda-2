@@ -115,7 +115,7 @@ export async function handler (event, context, callback) {
     })
   })
 
-  fetchUser(claims.clientContext.identity, claims.sub).then(user => {
+  fetchUser(context.clientContext.identity, claims.sub).then(user => {
     const lastMessage = new Date(
       user.app_metadata.last_message_at || 0
     ).getTime()
