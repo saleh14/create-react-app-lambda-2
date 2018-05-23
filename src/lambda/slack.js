@@ -1,6 +1,15 @@
 const fetch = require('node-fetch')
-const slackURL = process.env.SLACK_WEBHOOK_URL
-
+try {
+  require('dotenv').config()
+} catch (e) {}
+const { GoogleToken } = require('gtoken')
+// const slackURL = process.env.SLACK_WEBHOOK_URL
+const sheetID = process.env.GOOGLE_SHEET_ID
+const fullUrl = `https://content-sheets.googleapis.com/v4/spreadsheets/${sheetID}/values/A1:append?valueInputOption=USER_ENTERED&alt=json`
+const serviceAccount = process.env.SERVICE_ACC_ID
+const serviceAccKey = `-----BEGIN PRIVATE KEY-----
+${process.env.SERVICE_ACC_KEY.replace(/\ /g, '\n')}
+-----END PRIVATE KEY-----`
 class IdentityAPI {
   constructor (apiURL, token) {
     this.apiURL = apiURL
@@ -67,7 +76,7 @@ function updateUser (identity, user, app_metadata) {
 }
 
 const oneHour = 60 * 60 * 1000
-export function handler (event, context, callback) {
+export async function handler (event, context, callback) {
   if (event.httpMethod !== 'POST') {
     return callback(null, {
       statusCode: 410,
@@ -75,7 +84,7 @@ export function handler (event, context, callback) {
     })
   }
 
-  const claims = context.clientContext && context.clientContext.user
+  const claims = { clientContext: { identity: {} } } // context.clientContext && context.clientContext.user || {
   if (!claims) {
     return callback(null, {
       statusCode: 401,
@@ -83,7 +92,30 @@ export function handler (event, context, callback) {
     })
   }
 
-  fetchUser(context.clientContext.identity, claims.sub).then(user => {
+  const payload = JSON.parse(event.body)
+  const formValues = payload.formFields
+  console.log(payload)
+  const gtoken = new GoogleToken({
+    email: serviceAccount,
+    scope: 'https://www.googleapis.com/auth/spreadsheets',
+    key: serviceAccKey
+  })
+  const token = await gtoken.getToken()
+  console.log(token)
+
+  fetch(fullUrl, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'content-type': 'application/json; charset=UTF-8'
+    },
+    body: JSON.stringify({
+      majorDimension: 'ROWS',
+      values: [Object.values()]
+    })
+  })
+
+  fetchUser(claims.clientContext.identity, claims.sub).then(user => {
     const lastMessage = new Date(
       user.app_metadata.last_message_at || 0
     ).getTime()
@@ -96,8 +128,6 @@ export function handler (event, context, callback) {
     }
 
     try {
-      const payload = JSON.parse(event.body)
-
       fetch(slackURL, {
         method: 'POST',
         body: JSON.stringify({

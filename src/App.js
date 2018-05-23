@@ -1,11 +1,22 @@
 import React, { Component } from 'react'
 import netlifyIdentity from 'netlify-identity-widget'
+import Form from './components/Form'
 import './App.css'
 
 class SlackMessage extends Component {
   constructor (props) {
     super(props)
-    this.state = { loading: false, text: null, error: null, success: false }
+    this.state = {
+      loading: false,
+      formFields: null,
+      text: null,
+      error: null,
+      success: false
+    }
+  }
+
+  getFormFields (fields) {
+    this.setState({ fields: fields })
   }
 
   generateHeaders () {
@@ -31,7 +42,8 @@ class SlackMessage extends Component {
         method: 'POST',
         headers,
         body: JSON.stringify({
-          text: this.state.text
+          text: this.state.text,
+          formFields: this.state.formFields
         })
       })
         .then(response => {
@@ -63,21 +75,24 @@ class SlackMessage extends Component {
     const { loading, text, error, success } = this.state
 
     return (
-      <form onSubmit={this.handleSubmit}>
-        {error && <p><strong>Error sending message: {error}</strong></p>}
-        {success && <p><strong>Done! Message sent to Slack</strong></p>}
-        <p>
-          <label>
-            Your Message: <br />
-            <textarea onChange={this.handleText} value={text} />
-          </label>
-        </p>
-        <p>
-          <button type='submit' disabled={loading}>
-            {loading ? 'Sending Slack Message...' : 'Send a Slack Message'}
-          </button>
-        </p>
-      </form>
+      <div>
+        <Form getFormFields={fields => this.getFormFields(fields)} />
+        <form onSubmit={this.handleSubmit}>
+          {error && <p><strong>Error sending message: {error}</strong></p>}
+          {success && <p><strong>Done! Message sent to Slack</strong></p>}
+          <p>
+            <label>
+              Your Message: <br />
+              <textarea onChange={this.handleText} value={text} />
+            </label>
+          </p>
+          <p>
+            <button type='submit' disabled={loading}>
+              {loading ? 'Sending Slack Message...' : 'Send a Slack Message'}
+            </button>
+          </p>
+        </form>
+      </div>
     )
   }
 }
