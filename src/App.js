@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import netlifyIdentity from 'netlify-identity-widget'
 import Form from './components/Form'
-import './App.css'
+import styled from 'styled-components'
+// import './App.css'
 
 class SlackMessage extends Component {
   constructor (props) {
@@ -11,7 +12,8 @@ class SlackMessage extends Component {
       formFields: null,
       text: null,
       error: null,
-      success: false
+      success: false,
+      fullName: null
     }
   }
 
@@ -21,7 +23,11 @@ class SlackMessage extends Component {
 
   generateHeaders () {
     const headers = { 'Content-Type': 'application/json' }
+    console.log(`hello this is to see ${netlifyIdentity}`)
+    console.table(netlifyIdentity)
+    console.table(netlifyIdentity.currentUser())
     if (netlifyIdentity.currentUser()) {
+      this.state.fullName = netlifyIdentity.currentUser().user_metadata.full_name
       return netlifyIdentity.currentUser().jwt().then(token => {
         return { ...headers, Authorization: `Bearer ${token}` }
       })
@@ -76,6 +82,7 @@ class SlackMessage extends Component {
 
     return (
       <div>
+        <span> {this.state.fullName}</span>
         <Form getFormFields={fields => this.getFormFields(fields)} />
         <form onSubmit={this.handleSubmit}>
           {error && <p><strong>Error sending message: {error}</strong></p>}
@@ -97,6 +104,34 @@ class SlackMessage extends Component {
   }
 }
 
+const StyledApp = styled.div`
+  text-align: center;
+`
+const AppHeader = styled.header`
+  background-color: #322;
+  height: 150px;
+  padding: 20px;
+  color: white;
+  > h1{
+    font-size: 2em;
+    :hover{
+      background-color:lawngreen;
+    }
+  }
+`
+const LoginBtn = styled.a`
+    text-decoration:none;
+    color: #322;
+    background-color:lightblue;
+    border-radius: .7em;
+    padding: 5px 10px;
+    :active,:hover{
+      outline:none;
+      border:none;
+      background-color:lightskyblue;
+    }
+  `
+
 class App extends Component {
   componentDidMount () {
     netlifyIdentity.init()
@@ -106,16 +141,19 @@ class App extends Component {
     e.preventDefault()
     netlifyIdentity.open()
   }
-
   render () {
     return (
-      <div className='App'>
-        <header className='App-header'>
-          <h1 className='App-title'>Slack Messenger</h1>
-        </header>
-        <p><a href='#' onClick={this.handleIdentity}>User Status</a></p>
+      <StyledApp>
+        <AppHeader>
+          <h1>Slack Messenger</h1>
+        </AppHeader>
+        <p>
+          <LoginBtn href='#' onClick={this.handleIdentity}>
+            User state{' '}
+          </LoginBtn>
+        </p>
         <SlackMessage />
-      </div>
+      </StyledApp>
     )
   }
 }
