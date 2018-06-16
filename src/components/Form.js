@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import netlifyIdentity from 'netlify-identity-widget'
 import styled from 'styled-components'
 
 const StyledForm = styled.form`
@@ -29,10 +30,11 @@ const Radio = styled.input.attrs({ type: 'radio' })`
 
 export default class Form extends Component {
   state = {
-    user_fullName: '',
-    nationalID: ''
+    userFullName: '',
+    nationalID: '',
+    gender: ''
   }
-  change = e => {
+  onChange = e => {
     this.setState({
       [e.target.name]: e.target.value
     })
@@ -40,29 +42,52 @@ export default class Form extends Component {
       setTimeout(_ => this.props.getFormFields(this.state))
     }
   }
+
+  onSubmit = e => {
+    e.preventDefault()
+    this.props.onSubmit(this.state)
+    console.log(e)
+    this.setState({
+      userFullName: '',
+      nationalID: '',
+      gender: ''
+    })
+    e.target.reset()
+  }
+
   render () {
+    const { loading, text, error, success } = this.state
     return (
-      <StyledForm>
-        <label htmlFor='user_fullName'>
+      <StyledForm onSubmit={this.onSubmit}>
+        {error && <p><strong>Error sending message: {error}</strong></p>}
+        {success &&
+          <p><strong>Done! thank you for sending your form </strong></p>}
+        <label htmlFor='userFullName'>
           الاسم الكامل:
         </label>
         <input
           type='text'
-          name='user_fullName'
-          onChange={e => this.change(e)}
+          name='userFullName'
+          onChange={e => this.onChange(e)}
         />
         <label htmlFor='nationalID'>
           رقم الهوية:
         </label>
-        <input type='text' name='nationalID' onChange={e => this.change(e)} />
+        <input type='text' name='nationalID' onChange={e => this.onChange(e)} />
 
         <label htmlFor='gender'>
           الجنس:
-          <Radio name='gender' value='ذكر' onChange={e => this.change(e)} />
+          <Radio name='gender' value='ذكر' onChange={e => this.onChange(e)} />
           ذكر
-          <Radio name='gender' value='أنثى' onChange={e => this.change(e)} />
+          <Radio name='gender' value='أنثى' onChange={e => this.onChange(e)} />
           أنثى
         </label>
+
+        <p>
+          <button type='submit' disabled={loading}>
+            {loading ? 'Sending data...' : 'Submit'}
+          </button>
+        </p>
       </StyledForm>
     )
   }

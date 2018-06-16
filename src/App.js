@@ -4,21 +4,50 @@ import Form from './components/Form'
 import styled from 'styled-components'
 // import './App.css'
 
-class SlackMessage extends Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      loading: false,
-      formFields: null,
-      text: null,
-      error: null,
-      success: false,
-      fullName: null
+const StyledApp = styled.div`
+  text-align: center;
+`
+const AppHeader = styled.header`
+  background-color: #322;
+  height: 150px;
+  padding: 20px;
+  color: white;
+  > h1{
+    font-size: 2em;
+    :hover{
+      background-color:lawngreen;
     }
   }
+`
+const LoginBtn = styled.a`
+    text-decoration:none;
+    color: #322;
+    background-color:lightblue;
+    border-radius: .7em;
+    padding: 5px 10px;
+    :active,:hover{
+      outline:none;
+      border:none;
+      background-color:lightskyblue;
+    }
+  `
 
-  getFormFields (fields) {
-    this.setState({ formFields: fields })
+class App extends Component {
+  state = {
+    user_fullName: '',
+    nationalID: '',
+    loading: false,
+    formFields: null,
+    text: null,
+    error: null,
+    success: false,
+    fullName: null
+  }
+  componentDidMount () {
+    netlifyIdentity.init()
+    if (netlifyIdentity.currentUser()) {
+      this.state.fullName = netlifyIdentity.currentUser().user_metadata.full_name
+    }
   }
 
   generateHeaders () {
@@ -27,7 +56,7 @@ class SlackMessage extends Component {
     console.table(netlifyIdentity)
     console.table(netlifyIdentity.currentUser())
     if (netlifyIdentity.currentUser()) {
-      this.state.fullName = netlifyIdentity.currentUser().user_metadata.full_name
+      // this.state.fullName = netlifyIdentity.currentUser().user_metadata.full_name
       return netlifyIdentity.currentUser().jwt().then(token => {
         return { ...headers, Authorization: `Bearer ${token}` }
       })
@@ -35,13 +64,12 @@ class SlackMessage extends Component {
     return Promise.resolve(headers)
   }
 
-  handleText = e => {
-    this.setState({ text: e.target.value })
-  }
-
-  handleSubmit = e => {
+  handleIdentity = e => {
     e.preventDefault()
-
+    netlifyIdentity.open()
+  }
+  onSubmit (fields) {
+    console.log(fields)
     this.setState({ loading: true })
     this.generateHeaders().then(headers => {
       fetch('/.netlify/functions/slack', {
@@ -76,83 +104,18 @@ class SlackMessage extends Component {
         )
     })
   }
-
-  render () {
-    const { loading, text, error, success } = this.state
-
-    return (
-      <div>
-        <span> {this.state.fullName}</span>
-        <Form getFormFields={fields => this.getFormFields(fields)} />
-        <form onSubmit={this.handleSubmit}>
-          {error && <p><strong>Error sending message: {error}</strong></p>}
-          {success && <p><strong>Done! Message sent to Slack</strong></p>}
-          <p>
-            <label>
-              Your Message: <br />
-              <textarea onChange={this.handleText} value={text} />
-            </label>
-          </p>
-          <p>
-            <button type='submit' disabled={loading}>
-              {loading ? 'Sending Slack Message...' : 'Send a Slack Message'}
-            </button>
-          </p>
-        </form>
-      </div>
-    )
-  }
-}
-
-const StyledApp = styled.div`
-  text-align: center;
-`
-const AppHeader = styled.header`
-  background-color: #322;
-  height: 150px;
-  padding: 20px;
-  color: white;
-  > h1{
-    font-size: 2em;
-    :hover{
-      background-color:lawngreen;
-    }
-  }
-`
-const LoginBtn = styled.a`
-    text-decoration:none;
-    color: #322;
-    background-color:lightblue;
-    border-radius: .7em;
-    padding: 5px 10px;
-    :active,:hover{
-      outline:none;
-      border:none;
-      background-color:lightskyblue;
-    }
-  `
-
-class App extends Component {
-  componentDidMount () {
-    netlifyIdentity.init()
-  }
-
-  handleIdentity = e => {
-    e.preventDefault()
-    netlifyIdentity.open()
-  }
   render () {
     return (
       <StyledApp>
         <AppHeader>
-          <h1>Slack Messenger</h1>
+          <h1>.. ... ..</h1>
         </AppHeader>
         <p>
           <LoginBtn href='#' onClick={this.handleIdentity}>
             User state{' '}
           </LoginBtn>
         </p>
-        <SlackMessage />
+        <Form onSubmit={fields => this.onSubmit(fields)} />
       </StyledApp>
     )
   }
