@@ -14,8 +14,6 @@ const AppHeader = styled.header`
   color: white;
   > h1{
     font-size: 2em;
-    :hover{
-      background-color:lawngreen;
     }
   }
 `
@@ -37,8 +35,7 @@ class App extends Component {
     user_fullName: '',
     nationalID: '',
     loading: false,
-    formFields: null,
-    text: null,
+    fields: null,
     error: null,
     success: false,
     fullName: null
@@ -46,17 +43,15 @@ class App extends Component {
   componentDidMount () {
     netlifyIdentity.init()
     if (netlifyIdentity.currentUser()) {
-      this.state.fullName = netlifyIdentity.currentUser().user_metadata.full_name
+      this.setState({
+        fullName: netlifyIdentity.currentUser().user_metadata.full_name
+      })
     }
   }
 
   generateHeaders () {
     const headers = { 'Content-Type': 'application/json' }
-    console.log(`hello this is to see ${netlifyIdentity}`)
-    console.table(netlifyIdentity)
-    console.table(netlifyIdentity.currentUser())
     if (netlifyIdentity.currentUser()) {
-      // this.state.fullName = netlifyIdentity.currentUser().user_metadata.full_name
       return netlifyIdentity.currentUser().jwt().then(token => {
         return { ...headers, Authorization: `Bearer ${token}` }
       })
@@ -68,16 +63,24 @@ class App extends Component {
     e.preventDefault()
     netlifyIdentity.open()
   }
-  onSubmit (fields) {
-    console.log(fields)
+  onChange = updatedValue => {
+    this.setState({
+      fields: {
+        ...this.state.fields,
+        ...updatedValue
+      }
+    })
+  }
+  onSubmit () {
+    const formFields = this.state.fields
+    this.setState({ fields: {} })
     this.setState({ loading: true })
     this.generateHeaders().then(headers => {
       fetch('/.netlify/functions/slack', {
         method: 'POST',
         headers,
         body: JSON.stringify({
-          // text: this.state.text,
-          formFields: this.state.formFields
+          formFields
         })
       })
         .then(response => {
@@ -90,9 +93,9 @@ class App extends Component {
         .then(() =>
           this.setState({
             loading: false,
-            text: null,
             success: true,
-            error: null
+            error: null,
+            fields: null
           })
         )
         .catch(err =>
@@ -105,6 +108,7 @@ class App extends Component {
     })
   }
   render () {
+    const { loading, error, success } = this.state
     return (
       <StyledApp>
         <AppHeader>
@@ -115,7 +119,13 @@ class App extends Component {
             User state{' '}
           </LoginBtn>
         </p>
-        <Form onSubmit={fields => this.onSubmit(fields)} />
+        {error && <p><strong>Error sending message: {error}</strong></p>}
+        {success && <p><strong>Done! thank you for submitting</strong></p>}
+        <Form
+          loading={loading}
+          onChange={updatedValue => this.onChange(updatedValue)}
+          onSubmit={fields => this.onSubmit(fields)}
+        />
       </StyledApp>
     )
   }

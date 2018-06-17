@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import netlifyIdentity from 'netlify-identity-widget'
 import styled from 'styled-components'
 
 const StyledForm = styled.form`
@@ -35,12 +34,12 @@ export default class Form extends Component {
     gender: ''
   }
   onChange = e => {
+    this.props.onChange({
+      [e.target.name]: e.target.value
+    })
     this.setState({
       [e.target.name]: e.target.value
     })
-    if (this.props.getFormFields) {
-      setTimeout(_ => this.props.getFormFields(this.state))
-    }
   }
 
   onSubmit = e => {
@@ -56,12 +55,9 @@ export default class Form extends Component {
   }
 
   render () {
-    const { loading, text, error, success } = this.state
+    const { loading } = this.props
     return (
       <StyledForm onSubmit={this.onSubmit}>
-        {error && <p><strong>Error sending message: {error}</strong></p>}
-        {success &&
-          <p><strong>Done! thank you for sending your form </strong></p>}
         <label htmlFor='userFullName'>
           الاسم الكامل:
         </label>
@@ -77,6 +73,7 @@ export default class Form extends Component {
 
         <label htmlFor='gender'>
           الجنس:
+
           <Radio name='gender' value='ذكر' onChange={e => this.onChange(e)} />
           ذكر
           <Radio name='gender' value='أنثى' onChange={e => this.onChange(e)} />
