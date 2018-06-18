@@ -100,27 +100,37 @@ export async function handler (event, context, callback) {
     scope: 'https://www.googleapis.com/auth/spreadsheets',
     key: serviceAccKey
   })
-  const token = await gtoken.getToken()
-  console.log(token)
+  /*   const token = await gtoken.getToken()
+  console.log(token) */
 
-  fetch(fullUrl, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'content-type': 'application/json; charset=UTF-8'
-    },
-    body: JSON.stringify({
-      majorDimension: 'ROWS',
-      values: [[claims.email, ...Object.values(formValues)]]
-    })
-  })
-    .then(() => {
-      callback(null, { statusCode: 204 })
+  gtoken
+    .getToken()
+    .then(token => {
+      fetch(fullUrl, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'content-type': 'application/json; charset=UTF-8'
+        },
+        body: JSON.stringify({
+          majorDimension: 'ROWS',
+          values: [[claims.email, ...Object.values(formValues)]]
+        })
+      })
+        .then(() => {
+          callback(null, { statusCode: 204 })
+        })
+        .catch(err => {
+          callback(null, {
+            statusCode: 500,
+            body: 'Internal Server Error: ' + e
+          })
+        })
     })
     .catch(err => {
       callback(null, {
         statusCode: 500,
-        body: 'Internal Server Error: ' + e
+        body: 'could not access the token' + e
       })
     })
 }
