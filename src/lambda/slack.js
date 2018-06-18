@@ -114,43 +114,13 @@ export async function handler (event, context, callback) {
       values: [[claims.email, ...Object.values(formValues)]]
     })
   })
-
-  fetchUser(context.clientContext.identity, claims.sub).then(user => {
-    const lastMessage = new Date(
-      user.app_metadata.last_message_at || 0
-    ).getTime()
-    const cutOff = new Date().getTime() - oneHour
-    if (lastMessage > cutOff) {
-      return callback(null, {
-        statusCode: 401,
-        body: 'Only one message an hour allowed'
+    .then(() => {
+      callback(null, { statusCode: 204 })
+    })
+    .catch(err => {
+      callback(null, {
+        statusCode: 500,
+        body: 'Internal Server Error: ' + e
       })
-    }
-
-    try {
-      fetch(slackURL, {
-        method: 'POST',
-        body: JSON.stringify({
-          text: payload.text + ` \nValues sent: ${Object.values(formValues)}`,
-          attachments: [{ text: `From ${user.email}` }]
-        })
-      })
-        .then(() =>
-          updateUser(context.clientContext.identity, user, {
-            last_message_at: new Date().getTime()
-          })
-        )
-        .then(() => {
-          callback(null, { statusCode: 204, last_message_at })
-        })
-        .catch(err => {
-          callback(null, {
-            statusCode: 500,
-            body: 'Internal Server Error: ' + e
-          })
-        })
-    } catch (e) {
-      callback(null, { statusCode: 500, body: 'Internal Server Error: ' + e })
-    }
-  })
+    })
 }

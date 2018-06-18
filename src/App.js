@@ -94,8 +94,7 @@ class App extends Component {
           this.setState({
             loading: false,
             success: true,
-            error: null,
-            fields: null
+            error: null
           })
         )
         .catch(err =>
