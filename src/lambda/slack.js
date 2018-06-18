@@ -76,7 +76,7 @@ function updateUser (identity, user, app_metadata) {
 }
 
 const oneHour = 60 * 60 * 1000
-export async function handler (event, context, callback) {
+export function handler (event, context, callback) {
   if (event.httpMethod !== 'POST') {
     return callback(null, {
       statusCode: 410,
@@ -106,11 +106,6 @@ export async function handler (event, context, callback) {
   gtoken
     .getToken()
     .then(token => {
-      return callback(null, {
-        statusCode: 401,
-        body: 'this is the token: ' + JSON.stringify(token, null, 2)
-      })
-
       fetch(fullUrl, {
         method: 'POST',
         headers: {
@@ -123,7 +118,10 @@ export async function handler (event, context, callback) {
         })
       })
         .then(() => {
-          callback(null, { statusCode: 204 })
+          callback(null, {
+            statusCode: 204,
+            body: `this is the token: ${token}`
+          })
         })
         .catch(err => {
           callback(null, {
