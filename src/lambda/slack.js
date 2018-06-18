@@ -106,6 +106,11 @@ export async function handler (event, context, callback) {
   gtoken
     .getToken()
     .then(token => {
+      return callback(null, {
+        statusCode: 401,
+        body: 'this is the token: ' + JSON.stringify(token, null, 2)
+      })
+
       fetch(fullUrl, {
         method: 'POST',
         headers: {
