@@ -76,7 +76,7 @@ function updateUser (identity, user, app_metadata) {
 }
 
 const oneHour = 60 * 60 * 1000
-export async function handler (event, context, callback) {
+export function handler (event, context, callback) {
   if (event.httpMethod !== 'POST') {
     return callback(null, {
       statusCode: 410,
@@ -100,48 +100,28 @@ export async function handler (event, context, callback) {
     scope: 'https://www.googleapis.com/auth/spreadsheets',
     key: serviceAccKey
   })
-  const token = await gtoken.getToken()
-  console.log(token)
+  /*   const token = await gtoken.getToken()
+  console.log(token) */
 
-  fetch(fullUrl, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'content-type': 'application/json; charset=UTF-8'
-    },
-    body: JSON.stringify({
-      majorDimension: 'ROWS',
-      values: [[claims.email, ...Object.values(formValues)]]
-    })
-  })
-
-  fetchUser(context.clientContext.identity, claims.sub).then(user => {
-    const lastMessage = new Date(
-      user.app_metadata.last_message_at || 0
-    ).getTime()
-    const cutOff = new Date().getTime() - oneHour
-    if (lastMessage > cutOff) {
-      return callback(null, {
-        statusCode: 401,
-        body: 'Only one message an hour allowed'
-      })
-    }
-
-    try {
-      fetch(slackURL, {
+  gtoken
+    .getToken()
+    .then(token => {
+      fetch(fullUrl, {
         method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'content-type': 'application/json; charset=UTF-8'
+        },
         body: JSON.stringify({
-          text: payload.text + ` \nValues sent: ${Object.values(formValues)}`,
-          attachments: [{ text: `From ${user.email}` }]
+          majorDimension: 'ROWS',
+          values: [[claims.email, ...Object.values(formValues)]]
         })
       })
-        .then(() =>
-          updateUser(context.clientContext.identity, user, {
-            last_message_at: new Date().getTime()
-          })
-        )
         .then(() => {
-          callback(null, { statusCode: 204, last_message_at })
+          callback(null, {
+            statusCode: 204,
+            body: `this is the token: ${token}`
+          })
         })
         .catch(err => {
           callback(null, {
@@ -149,8 +129,11 @@ export async function handler (event, context, callback) {
             body: 'Internal Server Error: ' + e
           })
         })
-    } catch (e) {
-      callback(null, { statusCode: 500, body: 'Internal Server Error: ' + e })
-    }
-  })
+    })
+    .catch(err => {
+      callback(null, {
+        statusCode: 500,
+        body: 'could not access the token' + e
+      })
+    })
 }

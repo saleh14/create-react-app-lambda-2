@@ -1,22 +1,52 @@
 import React, { Component } from 'react'
 import netlifyIdentity from 'netlify-identity-widget'
 import Form from './components/Form'
-import './App.css'
+import styled from 'styled-components'
+// import './App.css'
 
-class SlackMessage extends Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      loading: false,
-      formFields: null,
-      text: null,
-      error: null,
-      success: false
+const StyledApp = styled.div`
+  text-align: center;
+`
+const AppHeader = styled.header`
+  background-color: #322;
+  height: 150px;
+  padding: 20px;
+  color: white;
+  > h1{
+    font-size: 2em;
     }
   }
+`
+const LoginBtn = styled.a`
+    text-decoration:none;
+    color: #322;
+    background-color:lightblue;
+    border-radius: .7em;
+    padding: 5px 10px;
+    :active,:hover{
+      outline:none;
+      border:none;
+      background-color:lightskyblue;
+    }
+  `
 
-  getFormFields (fields) {
-    this.setState({ formFields: fields })
+class App extends Component {
+  state = {
+    user_fullName: '',
+    nationalID: '',
+    loading: false,
+    fields: null,
+    error: null,
+    success: false,
+    fullName: null
+  }
+  componentDidMount () {
+    netlifyIdentity.init()
+    if (netlifyIdentity.currentUser()) {
+      this.setState({
+        fullName: netlifyIdentity.currentUser().user_metadata.full_name
+      })
+    }
   }
 
   generateHeaders () {
@@ -29,21 +59,30 @@ class SlackMessage extends Component {
     return Promise.resolve(headers)
   }
 
-  handleText = e => {
-    this.setState({ text: e.target.value })
-  }
-
-  handleSubmit = e => {
+  handleIdentity = e => {
     e.preventDefault()
+    netlifyIdentity.open()
+  }
+  onChange = updatedValue => {
+    this.setState({
+      fields: {
+        ...this.state.fields,
+        ...updatedValue
+      }
+    })
+  }
+  onSubmit () {
+    const formFields = this.state.fields
+    this.setState({ success: false, error: null })
 
+    this.setState({ fields: {} })
     this.setState({ loading: true })
     this.generateHeaders().then(headers => {
       fetch('/.netlify/functions/slack', {
         method: 'POST',
         headers,
         body: JSON.stringify({
-          // text: this.state.text,
-          formFields: this.state.formFields
+          formFields
         })
       })
         .then(response => {
@@ -56,7 +95,6 @@ class SlackMessage extends Component {
         .then(() =>
           this.setState({
             loading: false,
-            text: null,
             success: true,
             error: null
           })
@@ -70,52 +108,26 @@ class SlackMessage extends Component {
         )
     })
   }
-
   render () {
-    const { loading, text, error, success } = this.state
-
+    const { loading, error, success } = this.state
     return (
-      <div>
-        <Form getFormFields={fields => this.getFormFields(fields)} />
-        <form onSubmit={this.handleSubmit}>
-          {error && <p><strong>Error sending message: {error}</strong></p>}
-          {success && <p><strong>Done! Message sent to Slack</strong></p>}
-          <p>
-            <label>
-              Your Message: <br />
-              <textarea onChange={this.handleText} value={text} />
-            </label>
-          </p>
-          <p>
-            <button type='submit' disabled={loading}>
-              {loading ? 'Sending Slack Message...' : 'Send a Slack Message'}
-            </button>
-          </p>
-        </form>
-      </div>
-    )
-  }
-}
-
-class App extends Component {
-  componentDidMount () {
-    netlifyIdentity.init()
-  }
-
-  handleIdentity = e => {
-    e.preventDefault()
-    netlifyIdentity.open()
-  }
-
-  render () {
-    return (
-      <div className='App'>
-        <header className='App-header'>
-          <h1 className='App-title'>Slack Messenger</h1>
-        </header>
-        <p><a href='#' onClick={this.handleIdentity}>User Status</a></p>
-        <SlackMessage />
-      </div>
+      <StyledApp>
+        <AppHeader>
+          <h1>.. ... ..</h1>
+        </AppHeader>
+        <p>
+          <LoginBtn href='#' onClick={this.handleIdentity}>
+            User state{' '}
+          </LoginBtn>
+        </p>
+        {error && <p><strong>Error sending message: {error}</strong></p>}
+        {success && <p><strong>Done! thank you for submitting</strong></p>}
+        <Form
+          loading={loading}
+          onChange={updatedValue => this.onChange(updatedValue)}
+          onSubmit={fields => this.onSubmit(fields)}
+        />
+      </StyledApp>
     )
   }
 }
