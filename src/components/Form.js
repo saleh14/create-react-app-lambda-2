@@ -135,16 +135,27 @@ export default class Form extends Component {
       <div>
         <form onSubmit={this.onSave}>
 
-          <PairInputs>
-            <InactiveStepNo> 2 </InactiveStepNo>
-            <ActiveStepNo> 1 </ActiveStepNo>
-          </PairInputs>
-
+          {formStep === 1 &&
+            <PairInputs>
+              <InactiveStepNo> 2 </InactiveStepNo>
+              <ActiveStepNo> 1 </ActiveStepNo>
+            </PairInputs>}
+          {formStep === 2 &&
+            <PairInputs>
+              <ActiveStepNo> 2 </ActiveStepNo>
+              <InactiveStepNo> 1 </InactiveStepNo>
+            </PairInputs>}
           <br />
-          <PairInputs>
-            <InactiveStepLabel> تفاصيل الإستقطاع</InactiveStepLabel>
-            <ActiveStepLabel>معلومات المتبرع</ActiveStepLabel>
-          </PairInputs>
+          {formStep === 1 &&
+            <PairInputs>
+              <InactiveStepLabel> تفاصيل الإستقطاع</InactiveStepLabel>
+              <ActiveStepLabel>معلومات المتبرع </ActiveStepLabel>
+            </PairInputs>}
+          {formStep === 2 &&
+            <PairInputs>
+              <ActiveStepLabel> تفاصيل الإستقطاع</ActiveStepLabel>
+              <InactiveStepLabel> معلومات المتبرع</InactiveStepLabel>
+            </PairInputs>}
           <Section>
             <SectionBody>
               <label htmlFor='userFullName'>
@@ -198,15 +209,18 @@ export default class Form extends Component {
             <SectionTitle>العنوان</SectionTitle>
           </Section><Section>
             <SectionBody>
-              <label htmlFor='education'>
+              <label htmlFor='email'>
                 البريد الالكتروني:
               </label>
-              <TextInput name='education' onChange={e => this.onChange(e)} />
+              <TextInput name='email' onChange={e => this.onChange(e)} />
 
-              <label htmlFor='work'>
+              <label htmlFor='contactNumber'>
                 رقم التواصل:
               </label>
-              <TextInput name='work' onChange={e => this.onChange(e)} />
+              <TextInput
+                name='contactNumber'
+                onChange={e => this.onChange(e)}
+              />
             </SectionBody>
             <SectionTitle>معلومات الاتصال</SectionTitle>
           </Section>
@@ -243,7 +257,11 @@ export default class Form extends Component {
                 />
                 أخرى .
                 <span>.. </span>
-                {this.state.work === 'other' && <TextInput name='otherWork' />}
+                {this.state.work === 'other' &&
+                  <TextInput
+                    name='otherWork'
+                    onChange={e => this.onChange(e)}
+                  />}
               </label>
 
             </SectionBody>
