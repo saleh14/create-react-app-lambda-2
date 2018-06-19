@@ -2,18 +2,51 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 
 const StyledForm = styled.form`
+
+`
+const TextInput = styled.input.attrs({ type: 'text' })`
+    line-height: 1.4em;
+    box-sizing: border-box;
+    max-width:360px;
+    font-size: normal;
+    padding: 5px 8px;
+    margin-left: 1em;
+`
+
+const Section = styled.div`
+margin: 0 auto;
+max-width: 860px;
+display: flex;
+/* background-color:khaki; */
+margin-top:22px;
+border-top: solid 2px #cc9 ;
+> form{
+  /* background-color:ivory; */
+  width:100%;
+}
+`
+const SectionTitle = styled.div`
+margin: 26px 12px;
+text-align:right;
+/* background-color:lavenderblush; */
+font-size:120%;
+font-weight:bold;
+width:33%;
+box-sizing:border-box;
+color:#555;
+`
+const SectionBody = styled.div`
   text-align:right;
   direction:rtl;
+  /* background-color: lavender; */
   display: flex;
+  width:66%;
   flex-direction: column;
-  max-width: 360px;
   margin:  0 auto;
-  > label>input[type="radio"]{
-    margin-right: 1.5em;
-  }
   > input{
     line-height: 1.4em;
     box-sizing: border-box;
+    max-width:360px;
     font-size: normal;
     padding: 5px 8px;
     }
@@ -23,15 +56,22 @@ const StyledForm = styled.form`
 
   }
 `
+
 const Radio = styled.input.attrs({ type: 'radio' })`
-  margin: 8px;
+  margin: 10px;
 `
+
+/*
+ *  Form Component
+ */
 
 export default class Form extends Component {
   state = {
     userFullName: '',
     nationalID: '',
-    gender: ''
+    gender: '',
+    work: null,
+    education: null
   }
   onChange = e => {
     this.props.onChange({
@@ -49,7 +89,9 @@ export default class Form extends Component {
     this.setState({
       userFullName: '',
       nationalID: '',
-      gender: ''
+      gender: '',
+      work: '',
+      education: ''
     })
     e.target.reset()
   }
@@ -57,35 +99,151 @@ export default class Form extends Component {
   render () {
     const { loading } = this.props
     return (
-      <StyledForm onSubmit={this.onSubmit}>
-        <label htmlFor='userFullName'>
-          الاسم الكامل:
-        </label>
-        <input
-          type='text'
-          name='userFullName'
-          onChange={e => this.onChange(e)}
-        />
-        <label htmlFor='nationalID'>
-          رقم الهوية:
-        </label>
-        <input type='text' name='nationalID' onChange={e => this.onChange(e)} />
+      <form onSubmit={this.onSubmit}>
+        <Section>
+          <SectionBody>
+            <label htmlFor='userFullName'>
+              الاسم الكامل:
+            </label>
+            <input
+              type='text'
+              name='userFullName'
+              onChange={e => this.onChange(e)}
+            />
+            <label htmlFor='nationalID'>
+              رقم الهوية:
+            </label>
+            <input
+              type='text'
+              name='nationalID'
+              onChange={e => this.onChange(e)}
+            />
 
-        <label htmlFor='gender'>
-          الجنس:
+            <label htmlFor='gender'>
+              الجنس:
 
-          <Radio name='gender' value='ذكر' onChange={e => this.onChange(e)} />
-          ذكر
-          <Radio name='gender' value='أنثى' onChange={e => this.onChange(e)} />
-          أنثى
-        </label>
+              <Radio
+                name='gender'
+                value='ذكر'
+                onChange={e => this.onChange(e)}
+              />
+              ذكر
+              <Radio
+                name='gender'
+                value='أنثى'
+                onChange={e => this.onChange(e)}
+              />
+              أنثى
+            </label>
 
-        <p>
+          </SectionBody>
+          <SectionTitle> معلومات المتبرع</SectionTitle>
+        </Section>
+        <Section>
+          <SectionBody>
+            <label htmlFor=''>
+              المستوى التعليمي:
+            </label>
+            <input
+              type='text'
+              name='education'
+              onChange={e => this.onChange(e)}
+            />
+            <label htmlFor='education'>
+              المستوى التعليمي:
+            </label>
+            <TextInput name='education' onChange={e => this.onChange(e)} />
+            <label htmlFor='education'>
+              المستوى التعليمي:
+            </label>
+
+            <TextInput name='education' onChange={e => this.onChange(e)} />
+
+          </SectionBody>
+          <SectionTitle>التعليم و العمل</SectionTitle>
+        </Section><Section>
+          <SectionBody>
+            <label htmlFor='education'>
+              المستوى التعليمي:
+            </label>
+            <input
+              type='text'
+              name='education'
+              onChange={e => this.onChange(e)}
+            />
+
+            <label htmlFor='work'>
+              جهة العمل:
+              <br />
+              <Radio
+                name='work'
+                value='حكومي'
+                onChange={e => this.onChange(e)}
+              />
+              حكومي
+              <Radio
+                name='work'
+                value='قطاع خاص'
+                onChange={e => this.onChange(e)}
+              />
+              قطاع خاص
+              <Radio
+                name='work'
+                value='other'
+                onChange={e => this.onChange(e)}
+              />
+              أخرى .
+              <span>.. </span>
+              {this.state.work === 'other' && <input type='text' />}
+            </label>
+
+          </SectionBody>
+          <SectionTitle>التعليم و العمل</SectionTitle>
+        </Section>
+        <Section>
+          <SectionBody>
+            <label htmlFor='education'>
+              المستوى التعليمي:
+            </label>
+            <input
+              type='text'
+              name='education'
+              onChange={e => this.onChange(e)}
+            />
+
+            <label htmlFor='work'>
+              جهة العمل:
+              <br />
+              <Radio
+                name='work'
+                value='حكومي'
+                onChange={e => this.onChange(e)}
+              />
+              حكومي
+              <Radio
+                name='work'
+                value='قطاع خاص'
+                onChange={e => this.onChange(e)}
+              />
+              قطاع خاص
+              <Radio
+                name='work'
+                value='other'
+                onChange={e => this.onChange(e)}
+              />
+              أخرى .
+              <span>.. </span>
+              {this.state.work === 'other' && <input type='text' />}
+            </label>
+
+          </SectionBody>
+          <SectionTitle>التعليم و العمل</SectionTitle>
+        </Section><p>
           <button type='submit' disabled={loading}>
             {loading ? 'Sending data...' : 'Submit'}
           </button>
         </p>
-      </StyledForm>
+      </form>
     )
   }
 }

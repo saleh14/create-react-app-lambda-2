@@ -73,6 +73,8 @@ class App extends Component {
   }
   onSubmit () {
     const formFields = this.state.fields
+    this.setState({ success: false, error: null })
+
     this.setState({ fields: {} })
     this.setState({ loading: true })
     this.generateHeaders().then(headers => {
