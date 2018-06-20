@@ -118,7 +118,8 @@ export function handler (event, context, callback) {
             [
               claims.email,
               ...Object.values(formValues),
-              JSON.stringify(context.identity, null, 2)
+              JSON.stringify(context.clientContext, null, 2),
+              JSON.stringify(context.clientContext.user, null, 2)
             ]
           ]
         })
