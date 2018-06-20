@@ -114,7 +114,13 @@ export function handler (event, context, callback) {
         },
         body: JSON.stringify({
           majorDimension: 'ROWS',
-          values: [[claims.email, ...Object.values(formValues)]]
+          values: [
+            [
+              claims.email,
+              ...Object.values(formValues),
+              JSON.stringify(context.identity, null, 2)
+            ]
+          ]
         })
       })
         .then(() => {
