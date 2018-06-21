@@ -145,7 +145,7 @@ export default class Form extends Component {
                 <TextInput
                   name='userFullName'
                   onChange={e => this.onChange(e)}
-                  value={(userinfo && userinfo.userFullName) || ''}
+                  defaultValue={(userinfo && userinfo.userFullName) || ''}
                 />
                 <label htmlFor='nationalID'>
                   رقم الهوية:
@@ -153,7 +153,7 @@ export default class Form extends Component {
                 <TextInput
                   name='nationalID'
                   onChange={e => this.onChange(e)}
-                  value={(userinfo && userinfo.nationalID) || ''}
+                  defaultValue={(userinfo && userinfo.nationalID) || ''}
                 />
 
                 <label htmlFor='gender'>
@@ -185,21 +185,21 @@ export default class Form extends Component {
                 <TextInput
                   name='address'
                   onChange={e => this.onChange(e)}
-                  value={(userinfo && userinfo.address) || ''}
+                  defaultValue={(userinfo && userinfo.address) || ''}
                 />
 
                 <label htmlFor='postalBox'> صندوق البريد </label>
                 <TextInput
                   name='postalBox'
                   onChange={e => this.onChange(e)}
-                  value={(userinfo && userinfo.postalBox) || ''}
+                  defaultValue={(userinfo && userinfo.postalBox) || ''}
                 />
 
                 <label htmlFor='poastalCode'> الرمز البريدي: </label>
                 <TextInput
                   name='poastalCode'
                   onChange={e => this.onChange(e)}
-                  value={(userinfo && userinfo.postalCode) || ''}
+                  defaultValue={(userinfo && userinfo.postalCode) || ''}
                 />
               </SectionBody>
               <SectionTitle>العنوان</SectionTitle>
@@ -211,7 +211,7 @@ export default class Form extends Component {
                 <TextInput
                   name='email'
                   onChange={e => this.onChange(e)}
-                  value={(userinfo && userinfo.email) || ''}
+                  defaultValue={(userinfo && userinfo.email) || ''}
                 />
 
                 <label htmlFor='contactNumber'>
@@ -220,7 +220,7 @@ export default class Form extends Component {
                 <TextInput
                   name='contactNumber'
                   onChange={e => this.onChange(e)}
-                  value={(userinfo && userinfo.contactNumber) || ''}
+                  defaultValue={(userinfo && userinfo.contactNumber) || ''}
                 />
               </SectionBody>
               <SectionTitle>معلومات الاتصال</SectionTitle>
@@ -233,7 +233,7 @@ export default class Form extends Component {
                 <TextInput
                   name='education'
                   onChange={e => this.onChange(e)}
-                  value={(userinfo && userinfo.education) || ''}
+                  defaultValue={(userinfo && userinfo.education) || ''}
                 />
 
                 <label htmlFor='work'>
@@ -265,7 +265,7 @@ export default class Form extends Component {
                     <TextInput
                       name='otherWork'
                       onChange={e => this.onChange(e)}
-                      value={(userinfo && userinfo.otherWork) || ''}
+                      defaultValue={(userinfo && userinfo.otherWork) || ''}
                     />}
                 </label>
 
