@@ -1,9 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 
-const StyledForm = styled.form`
-
-`
 const TextInput = styled.input.attrs({ type: 'text' })`
     line-height: 1.4em;
     box-sizing: border-box;
