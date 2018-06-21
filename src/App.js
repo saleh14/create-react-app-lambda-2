@@ -32,6 +32,7 @@ const LoginBtn = styled.a`
 
 class App extends Component {
   state = {
+    user_metadata: null,
     loading: false,
     error: null,
     success: false,
@@ -43,7 +44,7 @@ class App extends Component {
     netlifyIdentity.init()
     if (netlifyIdentity.currentUser()) {
       this.setState({
-        fullName: netlifyIdentity.currentUser().user_metadata.full_name
+        user_metadata: netlifyIdentity.currentUser().user_metadata
       })
     }
   }
@@ -111,7 +112,7 @@ class App extends Component {
     })
   }
   render () {
-    const { loading, error, success } = this.state
+    const { loading, error, success, user_metadata } = this.state
     return (
       <StyledApp>
         <AppHeader>
@@ -125,6 +126,7 @@ class App extends Component {
         {error && <p><strong>Error sending message: {error}</strong></p>}
         {success && <p><strong>Done! thank you for submitting</strong></p>}
         <Form
+          userinfo={user_metadata}
           loading={loading}
           onChange={updatedValue => this.onChange(updatedValue)}
           onSubmit={fields => this.onSubmit(fields)}
