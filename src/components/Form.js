@@ -1,9 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 
-const StyledForm = styled.form`
-
-`
 const TextInput = styled.input.attrs({ type: 'text' })`
     line-height: 1.4em;
     box-sizing: border-box;
@@ -43,13 +40,6 @@ const SectionBody = styled.div`
   width:66%;
   flex-direction: column;
   margin:  0 auto;
-  > input{
-    line-height: 1.4em;
-    box-sizing: border-box;
-    max-width:360px;
-    font-size: normal;
-    padding: 5px 8px;
-    }
   >label{
     margin-top: 1.5em;
     margin-bottom: .4em;
@@ -129,7 +119,7 @@ export default class Form extends Component {
   }
 
   render () {
-    const { loading } = this.props
+    const { loading, userinfo } = this.props
     const { formStep } = this.state
 
     return (
@@ -152,18 +142,18 @@ export default class Form extends Component {
                 <label htmlFor='userFullName'>
                   الاسم الكامل:
                 </label>
-                <input
-                  type='text'
+                <TextInput
                   name='userFullName'
                   onChange={e => this.onChange(e)}
+                  defaultValue={(userinfo && userinfo.userFullName) || ''}
                 />
                 <label htmlFor='nationalID'>
                   رقم الهوية:
                 </label>
-                <input
-                  type='text'
+                <TextInput
                   name='nationalID'
                   onChange={e => this.onChange(e)}
+                  defaultValue={(userinfo && userinfo.nationalID) || ''}
                 />
 
                 <label htmlFor='gender'>
@@ -173,12 +163,15 @@ export default class Form extends Component {
                     name='gender'
                     value='ذكر'
                     onChange={e => this.onChange(e)}
+                    defaultChecked={userinfo && userinfo.gender === 'ذكر'}
                   />
+
                   ذكر
                   <Radio
                     name='gender'
                     value='أنثى'
                     onChange={e => this.onChange(e)}
+                    defaultChecked={userinfo && userinfo.gender === 'أنثى'}
                   />
                   أنثى
                 </label>
@@ -189,15 +182,24 @@ export default class Form extends Component {
             <Section>
               <SectionBody>
                 <label htmlFor='address'> العنوان </label>
-                <TextInput name='address' onChange={e => this.onChange(e)} />
+                <TextInput
+                  name='address'
+                  onChange={e => this.onChange(e)}
+                  defaultValue={(userinfo && userinfo.address) || ''}
+                />
 
                 <label htmlFor='postalBox'> صندوق البريد </label>
-                <TextInput name='postalBox' onChange={e => this.onChange(e)} />
+                <TextInput
+                  name='postalBox'
+                  onChange={e => this.onChange(e)}
+                  defaultValue={(userinfo && userinfo.postalBox) || ''}
+                />
 
                 <label htmlFor='poastalCode'> الرمز البريدي: </label>
                 <TextInput
                   name='poastalCode'
                   onChange={e => this.onChange(e)}
+                  defaultValue={(userinfo && userinfo.postalCode) || ''}
                 />
               </SectionBody>
               <SectionTitle>العنوان</SectionTitle>
@@ -206,7 +208,11 @@ export default class Form extends Component {
                 <label htmlFor='email'>
                   البريد الالكتروني:
                 </label>
-                <TextInput name='email' onChange={e => this.onChange(e)} />
+                <TextInput
+                  name='email'
+                  onChange={e => this.onChange(e)}
+                  defaultValue={(userinfo && userinfo.email) || ''}
+                />
 
                 <label htmlFor='contactNumber'>
                   رقم التواصل:
@@ -214,6 +220,7 @@ export default class Form extends Component {
                 <TextInput
                   name='contactNumber'
                   onChange={e => this.onChange(e)}
+                  defaultValue={(userinfo && userinfo.contactNumber) || ''}
                 />
               </SectionBody>
               <SectionTitle>معلومات الاتصال</SectionTitle>
@@ -223,10 +230,10 @@ export default class Form extends Component {
                 <label htmlFor='education'>
                   المستوى التعليمي:
                 </label>
-                <input
-                  type='text'
+                <TextInput
                   name='education'
                   onChange={e => this.onChange(e)}
+                  defaultValue={(userinfo && userinfo.education) || ''}
                 />
 
                 <label htmlFor='work'>
@@ -236,18 +243,21 @@ export default class Form extends Component {
                     name='work'
                     value='حكومي'
                     onChange={e => this.onChange(e)}
+                    defaultChecked={userinfo && userinfo.work === 'حكومي'}
                   />
                   حكومي
                   <Radio
                     name='work'
                     value='قطاع خاص'
                     onChange={e => this.onChange(e)}
+                    defaultChecked={userinfo && userinfo.work === 'قطاع خاص'}
                   />
                   قطاع خاص
                   <Radio
                     name='work'
                     value='other'
                     onChange={e => this.onChange(e)}
+                    defaultChecked={userinfo && userinfo.work === 'other'}
                   />
                   أخرى .
                   <span>.. </span>
@@ -255,6 +265,7 @@ export default class Form extends Component {
                     <TextInput
                       name='otherWork'
                       onChange={e => this.onChange(e)}
+                      defaultValue={(userinfo && userinfo.otherWork) || ''}
                     />}
                 </label>
 
