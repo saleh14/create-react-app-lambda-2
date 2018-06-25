@@ -120,7 +120,10 @@ class App extends Component {
           const localStorageRef = localStorage.getItem('gotrue.user')
           if (localStorageRef) {
             let localstorageObj = JSON.parse(localStorageRef)
-            localstorageObj.user_metadata = { ...this.state.user_metadata }
+            localstorageObj.user_metadata = {
+              ...localstorageObj.user_metadata,
+              ...userinfoFields
+            }
             localStorage.setItem('gotrue.user', JSON.stringify(localstorageObj))
           }
         })
