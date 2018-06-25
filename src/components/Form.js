@@ -115,12 +115,11 @@ export default class Form extends Component {
       education: ''
     })
     e.target.reset()
-    this.props.success && this.setState({ formStep: 2 })
   }
 
   render () {
     const { loading, userinfo } = this.props
-    const { formStep } = this.state
+    const { formStep } = this.props
 
     return (
       <React.Fragment>

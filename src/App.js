@@ -34,6 +34,7 @@ const LoginBtn = styled.a`
 class App extends Component {
   state = {
     user_metadata: null,
+    formStep: 1,
     login: false,
     loading: false,
     error: null,
@@ -114,7 +115,8 @@ class App extends Component {
           this.setState({
             loading: false,
             success: true,
-            error: null
+            error: null,
+            formStep: 2
           })
           // update localstorage with the current user metadata
           const localStorageRef = localStorage.getItem('gotrue.user')
@@ -137,7 +139,14 @@ class App extends Component {
     })
   }
   render () {
-    const { login, loading, error, success, user_metadata } = this.state
+    const {
+      login,
+      loading,
+      error,
+      success,
+      formStep,
+      user_metadata
+    } = this.state
     return (
       <StyledApp>
         <AppHeader>
@@ -154,6 +163,7 @@ class App extends Component {
           <Form
             userinfo={user_metadata}
             loading={loading}
+            formStep={formStep}
             success={success}
             onChange={updatedValue => this.onChange(updatedValue)}
             onSubmit={fields => this.onSubmit(fields)}
