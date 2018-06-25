@@ -115,7 +115,7 @@ export default class Form extends Component {
       education: ''
     })
     e.target.reset()
-    this.setState({ formStep: 2 })
+    this.props.success && this.setState({ formStep: 2 })
   }
 
   render () {

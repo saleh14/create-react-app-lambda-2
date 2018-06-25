@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import netlifyIdentity from 'netlify-identity-widget'
 import Form from './components/Form'
 import styled from 'styled-components'
+import { SSL_OP_TLS_ROLLBACK_BUG } from 'constants'
 // import './App.css'
 
 const StyledApp = styled.div`
@@ -109,13 +110,20 @@ class App extends Component {
             })
           }
         })
-        .then(() =>
+        .then(() => {
           this.setState({
             loading: false,
             success: true,
             error: null
           })
-        )
+          // update localstorage with the current user metadata
+          const localStorageRef = localStorage.getItem('gotrue.user')
+          if (localStorageRef) {
+            let localstorageObj = JSON.parse(localStorageRef)
+            localstorageObj.user_metadata = { ...this.state.user_metadata }
+            localStorage.setItem('gotrue.user', JSON.stringify(localstorageObj))
+          }
+        })
         .catch(err =>
           this.setState({
             loading: false,
@@ -143,6 +151,7 @@ class App extends Component {
           <Form
             userinfo={user_metadata}
             loading={loading}
+            success={success}
             onChange={updatedValue => this.onChange(updatedValue)}
             onSubmit={fields => this.onSubmit(fields)}
           />}
