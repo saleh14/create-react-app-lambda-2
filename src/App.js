@@ -47,6 +47,20 @@ class App extends Component {
         user_metadata: netlifyIdentity.currentUser().user_metadata
       })
     }
+
+    netlifyIdentity.on('login', user => {
+      console.log(user)
+      this.setState({ login: true })
+      if (netlifyIdentity.currentUser()) {
+        this.setState({
+          user_metadata: netlifyIdentity.currentUser().user_metadata
+        })
+      }
+    })
+    netlifyIdentity.on('logout', () => {
+      this.setState({ user_metadata: {} })
+      console.log('Logged out')
+    })
   }
 
   generateHeaders () {
