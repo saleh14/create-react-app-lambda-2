@@ -114,13 +114,11 @@ export default class Form extends Component {
       work: '',
       education: ''
     })
-    e.target.reset()
-    this.setState({ formStep: 2 })
   }
 
   render () {
     const { loading, userinfo } = this.props
-    const { formStep } = this.state
+    const { formStep } = this.props
 
     return (
       <React.Fragment>
@@ -195,9 +193,9 @@ export default class Form extends Component {
                   defaultValue={(userinfo && userinfo.postalBox) || ''}
                 />
 
-                <label htmlFor='poastalCode'> الرمز البريدي: </label>
+                <label htmlFor='postalCode'> الرمز البريدي: </label>
                 <TextInput
-                  name='poastalCode'
+                  name='postalCode'
                   onChange={e => this.onChange(e)}
                   defaultValue={(userinfo && userinfo.postalCode) || ''}
                 />
@@ -337,11 +335,8 @@ export default class Form extends Component {
                 <label htmlFor='postalBox'> صندوق البريد </label>
                 <TextInput name='postalBox' onChange={e => this.onChange(e)} />
 
-                <label htmlFor='poastalCode'> الرمز البريدي: </label>
-                <TextInput
-                  name='poastalCode'
-                  onChange={e => this.onChange(e)}
-                />
+                <label htmlFor='postalCode'> الرمز البريدي: </label>
+                <TextInput name='postalCode' onChange={e => this.onChange(e)} />
               </SectionBody>
               <SectionTitle>العنوان</SectionTitle>
             </Section><Section>

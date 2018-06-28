@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import netlifyIdentity from 'netlify-identity-widget'
 import Form from './components/Form'
 import styled from 'styled-components'
+import { SSL_OP_TLS_ROLLBACK_BUG } from 'constants'
 // import './App.css'
 
 const StyledApp = styled.div`
@@ -33,6 +34,8 @@ const LoginBtn = styled.a`
 class App extends Component {
   state = {
     user_metadata: null,
+    formStep: 1,
+    login: false,
     loading: false,
     error: null,
     success: false,
@@ -43,10 +46,23 @@ class App extends Component {
   componentDidMount () {
     netlifyIdentity.init()
     if (netlifyIdentity.currentUser()) {
+      this.setState({ login: true })
       this.setState({
         user_metadata: netlifyIdentity.currentUser().user_metadata
       })
     }
+
+    netlifyIdentity.on('login', user => {
+      if (user) {
+        this.setState({
+          user_metadata: user.user_metadata
+        })
+      }
+      this.setState({ login: true })
+    })
+    netlifyIdentity.on('logout', () => {
+      this.setState({ user_metadata: null, login: false })
+    })
   }
 
   generateHeaders () {
@@ -95,13 +111,24 @@ class App extends Component {
             })
           }
         })
-        .then(() =>
+        .then(() => {
           this.setState({
             loading: false,
             success: true,
-            error: null
+            error: null,
+            formStep: 2
           })
-        )
+          // update localstorage with the current user metadata
+          const localStorageRef = localStorage.getItem('gotrue.user')
+          if (localStorageRef) {
+            let localstorageObj = JSON.parse(localStorageRef)
+            localstorageObj.user_metadata = {
+              ...localstorageObj.user_metadata,
+              ...userinfoFields
+            }
+            localStorage.setItem('gotrue.user', JSON.stringify(localstorageObj))
+          }
+        })
         .catch(err =>
           this.setState({
             loading: false,
@@ -112,7 +139,14 @@ class App extends Component {
     })
   }
   render () {
-    const { loading, error, success, user_metadata } = this.state
+    const {
+      login,
+      loading,
+      error,
+      success,
+      formStep,
+      user_metadata
+    } = this.state
     return (
       <StyledApp>
         <AppHeader>
@@ -125,12 +159,15 @@ class App extends Component {
         </p>
         {error && <p><strong>Error sending message: {error}</strong></p>}
         {success && <p><strong>Done! thank you for submitting</strong></p>}
-        <Form
-          userinfo={user_metadata}
-          loading={loading}
-          onChange={updatedValue => this.onChange(updatedValue)}
-          onSubmit={fields => this.onSubmit(fields)}
-        />
+        {login &&
+          <Form
+            userinfo={user_metadata}
+            loading={loading}
+            formStep={formStep}
+            success={success}
+            onChange={updatedValue => this.onChange(updatedValue)}
+            onSubmit={fields => this.onSubmit(fields)}
+          />}
       </StyledApp>
     )
   }
