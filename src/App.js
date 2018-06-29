@@ -10,11 +10,11 @@ const StyledApp = styled.div`
 `
 const AppHeader = styled.header`
   background-color: #322;
-  height: 150px;
+  height: 10px;
   padding: 20px;
   color: white;
   > h1{
-    font-size: 2em;
+    font-size: 1em;
     }
   }
 `
@@ -34,7 +34,7 @@ const LoginBtn = styled.a`
 class App extends Component {
   state = {
     user_metadata: null,
-    formStep: 1,
+    formStep: 2,
     login: false,
     loading: false,
     error: null,
@@ -80,9 +80,13 @@ class App extends Component {
     netlifyIdentity.open()
   }
   onChange = updatedValue => {
+    const statusFields = this.state.formStep === 1
+      ? 'userinfoFields'
+      : 'donationFields'
+
     this.setState({
-      userinfoFields: {
-        ...this.state.userinfoFields,
+      [statusFields]: {
+        ...this.state[statusFields],
         ...updatedValue
       }
     })

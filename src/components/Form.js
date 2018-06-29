@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import Anb_bank_logo from '../assets/images/Anb_bank_logo.svg'
+// import { ReactComponent as Logo } from '../assets/images/NCB.svg'
 
 const TextInput = styled.input.attrs({ type: 'text' })`
     line-height: 1.4em;
@@ -81,6 +83,36 @@ const ActiveStepNo = styled.span`
   color: #dcc;
   background-color:#344;
 `
+const BanksRadio = styled.input.attrs({ type: 'radio' })`
+  line-height: 2em;
+  padding: 2em;
+  border-bottom: #987 solid 1px;
+
+`
+const BankItem = styled.label`
+line-height: 1.8em;
+font-size: larger;
+padding-top: .8em;
+color: #433211;
+display:block;
+border-bottom:solid 1px #db9;
+>span {
+  height: 2.5em;
+  padding-right:1em;
+  display:inline-flex;
+  >img{
+    height: 100%;
+  }
+}
+> div{
+  margin:0;
+  display:black;
+  padding:0;
+  color:#865;
+  font-size:small;
+}
+
+`
 /*
  *  Form Component
  */
@@ -92,7 +124,9 @@ export default class Form extends Component {
     nationalID: '',
     gender: '',
     work: null,
-    education: null
+    education: null,
+    paymentType: null,
+    paymentTransfer: null
   }
   onChange = e => {
     this.props.onChange({
@@ -288,116 +322,114 @@ export default class Form extends Component {
               <ActiveStepLabel> تفاصيل الإستقطاع</ActiveStepLabel>
               <InactiveStepLabel> معلومات المتبرع</InactiveStepLabel>
             </PairInputs>
+
             <Section>
-              <SectionBody>
-                <label htmlFor='userFullName'>
-                  الاسم الكامل:
-                </label>
-                <input
-                  type='text'
-                  name='userFullName'
-                  onChange={e => this.onChange(e)}
-                />
-                <label htmlFor='nationalID'>
-                  رقم الهوية:
-                </label>
-                <input
-                  type='text'
-                  name='nationalID'
-                  onChange={e => this.onChange(e)}
-                />
-
-                <label htmlFor='gender'>
-                  الجنس:
-
-                  <Radio
-                    name='gender'
-                    value='ذكر'
-                    onChange={e => this.onChange(e)}
-                  />
-                  ذكر
-                  <Radio
-                    name='gender'
-                    value='أنثى'
-                    onChange={e => this.onChange(e)}
-                  />
-                  أنثى
-                </label>
-
-              </SectionBody>
-              <SectionTitle> معلومات المتبرع</SectionTitle>
-            </Section>
-            <Section>
-              <SectionBody>
-                <label htmlFor='address'> العنوان </label>
-                <TextInput name='address' onChange={e => this.onChange(e)} />
-
-                <label htmlFor='postalBox'> صندوق البريد </label>
-                <TextInput name='postalBox' onChange={e => this.onChange(e)} />
-
-                <label htmlFor='postalCode'> الرمز البريدي: </label>
-                <TextInput name='postalCode' onChange={e => this.onChange(e)} />
-              </SectionBody>
-              <SectionTitle>العنوان</SectionTitle>
-            </Section><Section>
               <SectionBody>
                 <label htmlFor='email'>
-                  البريد الالكتروني:
+                  قيمة الإستقطاع
                 </label>
                 <TextInput name='email' onChange={e => this.onChange(e)} />
 
                 <label htmlFor='contactNumber'>
-                  رقم التواصل:
+                  مدة الإتستقطاع
                 </label>
                 <TextInput
                   name='contactNumber'
                   onChange={e => this.onChange(e)}
                 />
+                <label htmlFor='contactNumber'>
+                  تاريخ بداية الإستقطاع
+
+                </label>
+                <TextInput
+                  name='contactNumber'
+                  onChange={e => this.onChange(e)}
+                />
+                <label htmlFor='contactNumber'>
+                  رقم حسابك
+                </label>
+                <TextInput
+                  name='contactNumber'
+                  onChange={e => this.onChange(e)}
+                />
+                <label htmlFor='paymentType'>
+                  {' '}كيفية الدفع
+                  <br />
+                  <label>
+                    <Radio
+                      name='paymentType'
+                      value='شهري'
+                      onChange={e => this.onChange(e)}
+                    />
+                    شهري
+                  </label>
+                  <label>
+                    <Radio
+                      name='paymentType'
+                      value='نصف سنوي'
+                      onChange={e => this.onChange(e)}
+                    />
+                    نصف سنوي
+                  </label>
+                  <label>
+                    <Radio
+                      name='paymentType'
+                      value='سنوي'
+                      onChange={e => this.onChange(e)}
+                    />
+                    سنوي
+                  </label>
+                </label>
+                <label htmlFor='paymentTransfer'>
+                  طريقة الدفع
+                  <br />
+                  <label>
+                    <Radio
+                      name='paymentTransfer'
+                      value='نقداَ'
+                      onChange={e => this.onChange(e)}
+                    />
+                    نقداَ
+                  </label>
+                  <label>
+                    <Radio
+                      name='paymentTransfer'
+                      value='تحويل إلكتروني'
+                      onChange={e => this.onChange(e)}
+                    />
+                    تحويل إلكتروني
+                  </label>
+                  <label>
+                    <Radio
+                      name='paymentTransfer'
+                      value='إيداع مباشر'
+                      onChange={e => this.onChange(e)}
+                    />
+                    إيداع مباشر
+                  </label>
+                </label>
               </SectionBody>
-              <SectionTitle>معلومات الاتصال</SectionTitle>
+              <SectionTitle>تفاصيل استقطاعك</SectionTitle>
             </Section>
             <Section>
               <SectionBody>
-                <label htmlFor='education'>
-                  المستوى التعليمي:
-                </label>
-                <input
-                  type='text'
-                  name='education'
-                  onChange={e => this.onChange(e)}
-                />
+                <label htmlFor='bankSelection'>
+                  <BankItem>
 
-                <label htmlFor='work'>
-                  جهة العمل:
-                  <br />
-                  <Radio
-                    name='work'
-                    value='حكومي'
-                    onChange={e => this.onChange(e)}
-                  />
-                  حكومي
-                  <Radio
-                    name='work'
-                    value='قطاع خاص'
-                    onChange={e => this.onChange(e)}
-                  />
-                  قطاع خاص
-                  <Radio
-                    name='work'
-                    value='other'
-                    onChange={e => this.onChange(e)}
-                  />
-                  أخرى .
-                  <span>.. </span>
-                  {this.state.work === 'other' &&
-                    <TextInput
-                      name='otherWork'
-                      onChange={e => this.onChange(e)}
-                    />}
-                </label>
+                    <BanksRadio name='bankSelection' value='arabi' />
+                    البنك العربي
+                    <span><img src={Anb_bank_logo} /></span>
+                    <div> SA010005648631635868 </div>
+                  </BankItem>
+                  <BankItem>
+                    <BanksRadio name='bankSelection' value='samba' />
+                    البنك العربي
+                    <div> SA010005648631635868 </div>
+                  </BankItem>
 
+                </label>
               </SectionBody>
-              <SectionTitle>التعليم و العمل</SectionTitle>
+              <SectionTitle>اختيار البنك</SectionTitle>
             </Section><p>
               <button type='submit' disabled={loading}>
                 {loading ? 'Sending data...' : 'حفظ'}
