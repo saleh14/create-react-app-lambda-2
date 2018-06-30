@@ -1,6 +1,12 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import Anb_bank_logo from '../assets/images/Anb_bank_logo.svg'
+import Rajhi_bank_logo from '../assets/images/Al_Rajhi_Bank_Logo.svg'
+import Awal_bank_logo from '../assets/images/Alawal_Bank_Logo.svg'
+import Arabi_bank_logo from '../assets/images/Anb_bank_logo.svg'
+import Ahli_bank_logo from '../assets/images/NCB.svg'
+import Samba_bank_logo from '../assets/images/Samba_Bank_Logo.svg'
+import Riyadh_bank_logo from '../assets/images/Riyad_Bank_logo.svg'
+
 // import { ReactComponent as Logo } from '../assets/images/NCB.svg'
 
 const TextInput = styled.input.attrs({ type: 'text' })`
@@ -97,7 +103,7 @@ color: #433211;
 display:block;
 border-bottom:solid 1px #db9;
 >span {
-  height: 2.5em;
+  height: 2.0em;
   padding-right:1em;
   display:inline-flex;
   >img{
@@ -325,31 +331,31 @@ export default class Form extends Component {
 
             <Section>
               <SectionBody>
-                <label htmlFor='email'>
+                <label htmlFor='deductionAmount'>
                   قيمة الإستقطاع
                 </label>
-                <TextInput name='email' onChange={e => this.onChange(e)} />
+                <TextInput
+                  name='deductionAmount'
+                  onChange={e => this.onChange(e)}
+                />
 
-                <label htmlFor='contactNumber'>
+                <label htmlFor='deductionPeriod'>
                   مدة الإتستقطاع
                 </label>
                 <TextInput
-                  name='contactNumber'
+                  name='deductionPeriod'
                   onChange={e => this.onChange(e)}
                 />
-                <label htmlFor='contactNumber'>
+                <label htmlFor='startFrom'>
                   تاريخ بداية الإستقطاع
 
                 </label>
-                <TextInput
-                  name='contactNumber'
-                  onChange={e => this.onChange(e)}
-                />
-                <label htmlFor='contactNumber'>
+                <TextInput name='startFrom' onChange={e => this.onChange(e)} />
+                <label htmlFor='donatorAccountNumber'>
                   رقم حسابك
                 </label>
                 <TextInput
-                  name='contactNumber'
+                  name='donatorAccountNumber'
                   onChange={e => this.onChange(e)}
                 />
                 <label htmlFor='paymentType'>
@@ -418,12 +424,35 @@ export default class Form extends Component {
 
                     <BanksRadio name='bankSelection' value='arabi' />
                     البنك العربي
-                    <span><img src={Anb_bank_logo} /></span>
+                    <span><img src={Arabi_bank_logo} /></span>
                     <div> SA010005648631635868 </div>
                   </BankItem>
                   <BankItem>
-                    <BanksRadio name='bankSelection' value='samba' />
+
+                    <BanksRadio name='bankSelection' value='arabi' />
                     البنك العربي
+                    <span><img src={Samba_bank_logo} /></span>
+                    <div> SA010005648631635868 </div>
+                  </BankItem>
+                  <BankItem>
+
+                    <BanksRadio name='bankSelection' value='arabi' />
+                    البنك العربي
+                    <span><img src={Rajhi_bank_logo} /></span>
+                    <div> SA010005648631635868 </div>
+                  </BankItem>
+                  <BankItem>
+
+                    <BanksRadio name='bankSelection' value='arabi' />
+                    البنك العربي
+                    <span><img src={Riyadh_bank_logo} /></span>
+                    <div> SA010005648631635868 </div>
+                  </BankItem>
+                  <BankItem>
+
+                    <BanksRadio name='bankSelection' value='arabi' />
+                    البنك العربي
+                    <span><img src={Awal_bank_logo} /></span>
                     <div> SA010005648631635868 </div>
                   </BankItem>
 
