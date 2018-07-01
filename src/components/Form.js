@@ -3,9 +3,12 @@ import styled from 'styled-components'
 import Rajhi_bank_logo from '../assets/images/Al_Rajhi_Bank_Logo.svg'
 import Awal_bank_logo from '../assets/images/Alawal_Bank_Logo.svg'
 import Arabi_bank_logo from '../assets/images/Anb_bank_logo.svg'
-import Ahli_bank_logo from '../assets/images/NCB.svg'
+import Ahli_bank_logo from '../assets/images/Alahli-01.svg'
 import Samba_bank_logo from '../assets/images/Samba_Bank_Logo.svg'
 import Riyadh_bank_logo from '../assets/images/Riyad_Bank_logo.svg'
+import SABB_Bank_Logo from '../assets/images/SABB_Bank_Logo.svg'
+import NCB_bank_logo from '../assets/images/NCB.svg'
+import Fransi_bank_logo from '../assets/images/Saudi-French-Bank.gif'
 
 // import { ReactComponent as Logo } from '../assets/images/NCB.svg'
 
@@ -423,36 +426,64 @@ export default class Form extends Component {
                   <BankItem>
 
                     <BanksRadio name='bankSelection' value='arabi' />
-                    البنك العربي
+                    البنك الوطني العربي
                     <span><img src={Arabi_bank_logo} /></span>
                     <div> SA010005648631635868 </div>
                   </BankItem>
                   <BankItem>
 
                     <BanksRadio name='bankSelection' value='arabi' />
-                    البنك العربي
+                    البنك الوطني العربي
+                    <span><img src={Arabi_bank_logo} /></span>
+                    <div> SA010005648631635868 </div>
+                  </BankItem>
+                  <BankItem>
+
+                    <BanksRadio name='bankSelection' value='samba' />
+                    مجموعة سامبا المالية
                     <span><img src={Samba_bank_logo} /></span>
                     <div> SA010005648631635868 </div>
                   </BankItem>
                   <BankItem>
 
-                    <BanksRadio name='bankSelection' value='arabi' />
-                    البنك العربي
-                    <span><img src={Rajhi_bank_logo} /></span>
-                    <div> SA010005648631635868 </div>
-                  </BankItem>
-                  <BankItem>
-
-                    <BanksRadio name='bankSelection' value='arabi' />
-                    البنك العربي
+                    <BanksRadio name='bankSelection' value='riyadhBank' />
+                    بنك الرياض
                     <span><img src={Riyadh_bank_logo} /></span>
                     <div> SA010005648631635868 </div>
                   </BankItem>
                   <BankItem>
 
-                    <BanksRadio name='bankSelection' value='arabi' />
-                    البنك العربي
+                    <BanksRadio name='bankSelection' value='fransi' />
+                    البنك السعودي الفرنسي
+                    <span><img src={Fransi_bank_logo} /></span>
+                    <div> SA010005648631635868 </div>
+                  </BankItem>
+                  <BankItem>
+
+                    <BanksRadio name='bankSelection' value='awal' />
+                    البنك الأول
                     <span><img src={Awal_bank_logo} /></span>
+                    <div> SA010005648631635868 </div>
+                  </BankItem>
+                  <BankItem>
+
+                    <BanksRadio name='bankSelection' value='alahli' />
+                    البنك الأهلي التجاري
+                    <span><img src={NCB_bank_logo} height='1em' /></span>
+                    <div> SA010005648631635868 </div>
+                  </BankItem>
+                  <BankItem>
+
+                    <BanksRadio name='bankSelection' value='sabb' />
+                    ساب
+                    <span><img src={SABB_Bank_Logo} /></span>
+                    <div> SA010005648631635868 </div>
+                  </BankItem>
+                  <BankItem>
+
+                    <BanksRadio name='bankSelection' value='rajhi' />
+                    مصرف الراجحي
+                    <span><img src={Rajhi_bank_logo} /></span>
                     <div> SA010005648631635868 </div>
                   </BankItem>
 
