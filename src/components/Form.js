@@ -92,7 +92,7 @@ const ActiveStepNo = styled.span`
   color: #dcc;
   background-color:#344;
 `
-const BanksRadio = styled.input.attrs({ type: 'radio' })`
+const BanksRadio = styled.input.attrs({ type: 'radio', name: 'bankSelection' })`
   line-height: 2em;
   padding: 2em;
   border-bottom: #987 solid 1px;
@@ -148,7 +148,7 @@ export default class Form extends Component {
 
   onSave = e => {
     e.preventDefault()
-    this.props.onSubmit(this.state)
+    this.props.onSave(this.state)
     console.log(e)
     this.setState({
       userFullName: '',
@@ -159,6 +159,10 @@ export default class Form extends Component {
     })
   }
 
+  onSubmit = e => {
+    e.preventDefault()
+    this.props.onSubmit(this.state)
+  }
   render () {
     const { loading, userinfo } = this.props
     const { formStep } = this.props
@@ -320,7 +324,7 @@ export default class Form extends Component {
           </form>}
 
         {formStep === 2 &&
-          <form onSubmit={this.onSave}>
+          <form onSubmit={this.onSubmit}>
 
             <PairInputs>
               <ActiveStepNo> 2 </ActiveStepNo>
@@ -425,63 +429,84 @@ export default class Form extends Component {
                 <label htmlFor='bankSelection'>
                   <BankItem>
 
-                    <BanksRadio name='bankSelection' value='arabi' />
+                    <BanksRadio
+                      onChange={e => this.onChange(e)}
+                      value='arabi1'
+                    />
                     البنك الوطني العربي
                     <span><img src={Arabi_bank_logo} /></span>
                     <div> SA010005648631635868 </div>
                   </BankItem>
                   <BankItem>
 
-                    <BanksRadio name='bankSelection' value='arabi' />
+                    <BanksRadio
+                      onChange={e => this.onChange(e)}
+                      value='arabi2'
+                    />
                     البنك الوطني العربي
                     <span><img src={Arabi_bank_logo} /></span>
                     <div> SA010005648631635868 </div>
                   </BankItem>
                   <BankItem>
 
-                    <BanksRadio name='bankSelection' value='samba' />
+                    <BanksRadio
+                      onChange={e => this.onChange(e)}
+                      value='samba'
+                    />
                     مجموعة سامبا المالية
                     <span><img src={Samba_bank_logo} /></span>
                     <div> SA010005648631635868 </div>
                   </BankItem>
                   <BankItem>
 
-                    <BanksRadio name='bankSelection' value='riyadhBank' />
+                    <BanksRadio
+                      onChange={e => this.onChange(e)}
+                      value='riyadhBank'
+                    />
                     بنك الرياض
                     <span><img src={Riyadh_bank_logo} /></span>
                     <div> SA010005648631635868 </div>
                   </BankItem>
                   <BankItem>
 
-                    <BanksRadio name='bankSelection' value='fransi' />
+                    <BanksRadio
+                      onChange={e => this.onChange(e)}
+                      value='fransi'
+                    />
                     البنك السعودي الفرنسي
                     <span><img src={Fransi_bank_logo} /></span>
                     <div> SA010005648631635868 </div>
                   </BankItem>
                   <BankItem>
 
-                    <BanksRadio name='bankSelection' value='awal' />
+                    <BanksRadio onChange={e => this.onChange(e)} value='awal' />
                     البنك الأول
                     <span><img src={Awal_bank_logo} /></span>
                     <div> SA010005648631635868 </div>
                   </BankItem>
                   <BankItem>
 
-                    <BanksRadio name='bankSelection' value='alahli' />
+                    <BanksRadio
+                      onChange={e => this.onChange(e)}
+                      value='alahli'
+                    />
                     البنك الأهلي التجاري
                     <span><img src={NCB_bank_logo} height='1em' /></span>
                     <div> SA010005648631635868 </div>
                   </BankItem>
                   <BankItem>
 
-                    <BanksRadio name='bankSelection' value='sabb' />
+                    <BanksRadio onChange={e => this.onChange(e)} value='sabb' />
                     ساب
                     <span><img src={SABB_Bank_Logo} /></span>
                     <div> SA010005648631635868 </div>
                   </BankItem>
                   <BankItem>
 
-                    <BanksRadio name='bankSelection' value='rajhi' />
+                    <BanksRadio
+                      onChange={e => this.onChange(e)}
+                      value='rajhi'
+                    />
                     مصرف الراجحي
                     <span><img src={Rajhi_bank_logo} /></span>
                     <div> SA010005648631635868 </div>

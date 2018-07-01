@@ -34,7 +34,7 @@ const LoginBtn = styled.a`
 class App extends Component {
   state = {
     user_metadata: null,
-    formStep: 2,
+    formStep: 1,
     login: false,
     loading: false,
     error: null,
@@ -92,6 +92,48 @@ class App extends Component {
     })
   }
   onSubmit () {
+    const { donationFields, userinfoFields } = this.state
+    this.setState({
+      success: false,
+      error: null,
+      userinfoFields: {},
+      loading: true
+    })
+
+    this.generateHeaders().then(headers => {
+      fetch('/.netlify/functions/googlesheet', {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          userinfoFields,
+          donationFields
+        })
+      })
+        .then(response => {
+          if (!response.ok) {
+            return response.text().then(err => {
+              throw err
+            })
+          }
+        })
+        .then(() => {
+          this.setState({
+            loading: false,
+            success: true,
+            error: null,
+            formStep: 0
+          })
+        })
+        .catch(err =>
+          this.setState({
+            loading: false,
+            success: false,
+            error: err.toString()
+          })
+        )
+    })
+  }
+  onSave () {
     const { userinfoFields } = this.state
     this.setState({
       success: false,
@@ -170,6 +212,7 @@ class App extends Component {
             formStep={formStep}
             success={success}
             onChange={updatedValue => this.onChange(updatedValue)}
+            onSave={fields => this.onSave(fields)}
             onSubmit={fields => this.onSubmit(fields)}
           />}
       </StyledApp>

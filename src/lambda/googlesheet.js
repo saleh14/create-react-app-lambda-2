@@ -19,15 +19,15 @@ export function handler (event, context, callback) {
     })
   }
 
-  const claims = context.clientContext && context.clientContext.user
-  if (!claims) {
-    return callback(null, {
-      statusCode: 401,
-      body: 'You must be signed in to call this function'
-    })
-  }
+  // const claims = context.clientContext && context.clientContext.user
+  // if (!claims) {
+  //   return callback(null, {
+  //     statusCode: 401,
+  //     body: 'You must be signed in to call this function'
+  //   })
+  // }
 
-  const { userinfoFields } = JSON.parse(event.body)
+  const { userinfoFields, donationFields } = JSON.parse(event.body)
   console.log(userinfoFields)
   const gtoken = new GoogleToken({
     email: serviceAccount,
@@ -48,7 +48,13 @@ export function handler (event, context, callback) {
         },
         body: JSON.stringify({
           majorDimension: 'ROWS',
-          values: [[claims.email, ...Object.values(userinfoFields)]]
+          values: [
+            [
+              // claims.email,
+              ...Object.values(userinfoFields),
+              ...Object.values(donationFields)
+            ]
+          ]
         })
       })
         .then(() => {
