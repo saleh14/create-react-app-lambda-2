@@ -92,7 +92,7 @@ class App extends Component {
     })
   }
   onSubmit () {
-    const { donationFields, userinfoFields } = this.state
+    const { donationFields, user_metadata } = this.state
     this.setState({
       success: false,
       error: null,
@@ -105,7 +105,7 @@ class App extends Component {
         method: 'POST',
         headers,
         body: JSON.stringify({
-          userinfoFields,
+          user_metadata,
           donationFields
         })
       })

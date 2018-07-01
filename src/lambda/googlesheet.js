@@ -19,16 +19,16 @@ export function handler (event, context, callback) {
     })
   }
 
-  // const claims = context.clientContext && context.clientContext.user
-  // if (!claims) {
-  //   return callback(null, {
-  //     statusCode: 401,
-  //     body: 'You must be signed in to call this function'
-  //   })
-  // }
+  const claims = context.clientContext && context.clientContext.user
+  if (!claims) {
+    return callback(null, {
+      statusCode: 401,
+      body: 'You must be signed in to call this function'
+    })
+  }
 
-  const { userinfoFields, donationFields } = JSON.parse(event.body)
-  console.log(userinfoFields)
+  const { user_metadata, donationFields } = JSON.parse(event.body)
+  console.log(user_metadata)
   const gtoken = new GoogleToken({
     email: serviceAccount,
     scope: 'https://www.googleapis.com/auth/spreadsheets',
@@ -51,7 +51,7 @@ export function handler (event, context, callback) {
           values: [
             [
               // claims.email,
-              ...Object.values(userinfoFields),
+              ...Object.values(user_metadata),
               ...Object.values(donationFields)
             ]
           ]
