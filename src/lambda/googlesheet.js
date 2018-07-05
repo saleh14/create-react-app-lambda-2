@@ -54,12 +54,14 @@ export function handler (event, context, callback) {
           console.log(data)
           let [headerRow] = JSON.parse(data).values
 
+          console.log(headerRow)
           let receivedRow = [
             ['accountEmail', claims.email],
             ...Object.entries(user_metadata),
             ...Object.entries(donationFields)
           ]
 
+          console.log(receivedRow)
           sortedRow = ['accountEmail', ...headerRow]
 
           Object.entries(receivedRow).forEach(([key, value]) => {
@@ -78,31 +80,24 @@ export function handler (event, context, callback) {
               majorDimension: 'ROWS',
               values: [[...headerRow]]
             })
+          }).then(() => {
+            callback(null, {
+              statusCode: 204,
+              body: `this is the token: ${token}`
+            })
           })
-            .then(() => {
-              callback(null, {
-                statusCode: 204,
-                body: `this is the token: ${token}`
-              })
-            })
-            .catch(err => {
-              callback(null, {
-                statusCode: 500,
-                body: 'Internal Server Error: ' + err
-              })
-            })
+        })
+        .catch(err => {
+          callback(null, {
+            statusCode: 500,
+            body: 'Internal Server Error: ' + err
+          })
         })
     })
     .catch(err => {
       callback(null, {
         statusCode: 500,
         body: 'Internal Server Error: ' + err
-      })
-    })
-    .catch(err => {
-      callback(null, {
-        statusCode: 500,
-        body: 'could not access the token' + err
       })
     })
 }
