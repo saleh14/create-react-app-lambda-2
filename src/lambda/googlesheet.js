@@ -5,7 +5,8 @@ try {
 const { GoogleToken } = require('gtoken')
 // const slackURL = process.env.SLACK_WEBHOOK_URL
 const sheetID = process.env.GOOGLE_SHEET_ID
-const fullUrl = `https://content-sheets.googleapis.com/v4/spreadsheets/${sheetID}/values/A1:append?valueInputOption=USER_ENTERED&alt=json`
+const postURL = `https://content-sheets.googleapis.com/v4/spreadsheets/${sheetID}/values/A1:append?valueInputOption=USER_ENTERED&alt=json`
+const getURL = `https://sheets.googleapis.com/v4/spreadsheets/${sheetID}/values/A1%3AS1?majorDimension=ROWS&fields=values`
 const serviceAccount = process.env.SERVICE_ACC_ID
 const serviceAccKey = `-----BEGIN PRIVATE KEY-----
 ${process.env.SERVICE_ACC_KEY.replace(/\ /g, '\n')}
@@ -40,35 +41,63 @@ export function handler (event, context, callback) {
   gtoken
     .getToken()
     .then(token => {
-      fetch(fullUrl, {
-        method: 'POST',
+      fetch(getURL, {
         headers: {
           Authorization: `Bearer ${token}`,
           'content-type': 'application/json; charset=UTF-8'
-        },
-        body: JSON.stringify({
-          majorDimension: 'ROWS',
-          values: [
-            [
-              // claims.email,
-              ...Object.values(user_metadata),
-              ...Object.values(donationFields)
-            ]
-          ]
-        })
+        }
       })
-        .then(() => {
-          callback(null, {
-            statusCode: 204,
-            body: `this is the token: ${token}`
-          })
+        .then(res => {
+          return res.json()
         })
-        .catch(err => {
-          callback(null, {
-            statusCode: 500,
-            body: 'Internal Server Error: ' + err
+        .then(data => {
+          console.log(data)
+          let [headerRow] = JSON.parse(data).values
+
+          let receivedRow = [
+            ['accountEmail', claims.email],
+            ...Object.entries(user_metadata),
+            ...Object.entries(donationFields)
+          ]
+
+          sortedRow = ['accountEmail', ...headerRow]
+
+          Object.entries(receivedRow).forEach(([key, value]) => {
+            const index = sortedRow.indexOf(key) >= 0
+              ? sortedRow.indexOf(key)
+              : sortedRow.push(null) - 1
+            sortedRow[index] = value
           })
+          fetch(postURL, {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'content-type': 'application/json; charset=UTF-8'
+            },
+            body: JSON.stringify({
+              majorDimension: 'ROWS',
+              values: [[...headerRow]]
+            })
+          })
+            .then(() => {
+              callback(null, {
+                statusCode: 204,
+                body: `this is the token: ${token}`
+              })
+            })
+            .catch(err => {
+              callback(null, {
+                statusCode: 500,
+                body: 'Internal Server Error: ' + err
+              })
+            })
         })
+    })
+    .catch(err => {
+      callback(null, {
+        statusCode: 500,
+        body: 'Internal Server Error: ' + err
+      })
     })
     .catch(err => {
       callback(null, {
