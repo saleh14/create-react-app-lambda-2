@@ -62,7 +62,7 @@ export function handler (event, context, callback) {
           ]
 
           console.log(receivedRow)
-          sortedRow = ['accountEmail', ...headerRow]
+          let sortedRow = ['accountEmail', ...headerRow]
 
           Object.entries(receivedRow).forEach(([key, value]) => {
             const index = sortedRow.indexOf(key) >= 0
