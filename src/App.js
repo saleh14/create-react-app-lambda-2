@@ -91,7 +91,7 @@ class App extends Component {
       }
     })
   }
-  onSubmit () {
+  onSubmit = () => {
     const { donationFields, user_metadata } = this.state
     this.setState({
       success: false,
@@ -133,7 +133,7 @@ class App extends Component {
         )
     })
   }
-  onSave () {
+  onSave = () => {
     const { userinfoFields } = this.state
     this.setState({
       success: false,
@@ -173,6 +173,7 @@ class App extends Component {
               ...userinfoFields
             }
             localStorage.setItem('gotrue.user', JSON.stringify(localstorageObj))
+            this.setState({ user_metadata: localstorageObj.user_metadata })
           }
         })
         .catch(err =>
