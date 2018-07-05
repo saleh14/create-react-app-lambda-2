@@ -52,7 +52,7 @@ export function handler (event, context, callback) {
         })
         .then(data => {
           console.log(data)
-          let [headerRow] = JSON.parse(data).values
+          let [headerRow] = data.values
 
           console.log(headerRow)
           let receivedRow = [
