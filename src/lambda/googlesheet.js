@@ -35,8 +35,6 @@ export function handler (event, context, callback) {
     scope: 'https://www.googleapis.com/auth/spreadsheets',
     key: serviceAccKey
   })
-  /*   const token = await gtoken.getToken()
-  console.log(token) */
 
   gtoken
     .getToken()
@@ -64,7 +62,7 @@ export function handler (event, context, callback) {
           console.log(receivedRow)
           let sortedRow = ['accountEmail', ...headerRow]
 
-          Object.entries(receivedRow).forEach(([key, value]) => {
+          receivedRow.forEach(([key, value]) => {
             const index = sortedRow.indexOf(key) >= 0
               ? sortedRow.indexOf(key)
               : sortedRow.push(null) - 1
