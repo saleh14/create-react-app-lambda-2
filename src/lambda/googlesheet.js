@@ -52,15 +52,13 @@ export function handler (event, context, callback) {
           console.log(data)
           let [headerRow] = data.values
 
-          console.log(headerRow)
           let receivedRow = [
             ['accountEmail', claims.email],
             ...Object.entries(user_metadata),
             ...Object.entries(donationFields)
           ]
 
-          console.log(receivedRow)
-          let sortedRow = ['accountEmail', ...headerRow]
+          let sortedRow = [...headerRow]
 
           receivedRow.forEach(([key, value]) => {
             const index = sortedRow.indexOf(key) >= 0
