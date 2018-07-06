@@ -6,7 +6,7 @@ const { GoogleToken } = require('gtoken')
 // const slackURL = process.env.SLACK_WEBHOOK_URL
 const sheetID = process.env.GOOGLE_SHEET_ID
 const postURL = `https://content-sheets.googleapis.com/v4/spreadsheets/${sheetID}/values/A1:append?valueInputOption=USER_ENTERED&alt=json`
-const getURL = `https://sheets.googleapis.com/v4/spreadsheets/${sheetID}/values/A1%3AS1?majorDimension=ROWS&fields=values`
+const getURL = `https://sheets.googleapis.com/v4/spreadsheets/${sheetID}/values/A1%3AT1?majorDimension=ROWS&fields=values`
 const serviceAccount = process.env.SERVICE_ACC_ID
 const serviceAccKey = `-----BEGIN PRIVATE KEY-----
 ${process.env.SERVICE_ACC_KEY.replace(/\ /g, '\n')}
