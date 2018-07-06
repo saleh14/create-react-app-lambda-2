@@ -76,7 +76,7 @@ export function handler (event, context, callback) {
             },
             body: JSON.stringify({
               majorDimension: 'ROWS',
-              values: [[...headerRow]]
+              values: [sortedRow]
             })
           }).then(() => {
             callback(null, {
